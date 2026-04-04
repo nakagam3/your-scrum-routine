@@ -1,0 +1,14 @@
+{
+  "name": "your-scrum-routine",
+  "owner": {
+    "name": "nakagam3"
+  },
+  "plugins": [
+    {
+      "name": "your-scrum-routine",
+      "description": "Your dedicated scrum master — one-person scrum ceremony skills for Claude Code",
+      "source": "./",
+      "version": "0.1.0"
+    }
+  ]
+}
