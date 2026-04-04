@@ -29,7 +29,25 @@ claude plugin marketplace add /path/to/your-scrum-routine
 claude plugin install your-scrum-routine
 ```
 
-### アップデート
+### 自動アップデートの有効化
+
+サードパーティ marketplace はデフォルトで autoupdate が無効。有効にするには `~/.claude/settings.json` の該当エントリに `autoUpdate: true` を追加する:
+
+```jsonc
+// ~/.claude/settings.json
+{
+  "extraKnownMarketplaces": {
+    "your-scrum-routine": {
+      "source": { ... },
+      "autoUpdate": true  // ← これを追加
+    }
+  }
+}
+```
+
+有効にすると、セッション起動時に自動で最新バージョンに更新される。更新があった場合は `/reload-plugins` の実行を促す通知が表示される。
+
+### 手動アップデート
 
 ```bash
 # marketplace のソースを最新に同期
