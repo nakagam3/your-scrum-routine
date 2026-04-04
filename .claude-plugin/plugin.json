@@ -1,0 +1,7 @@
+{
+  "name": "your-scrum-routine",
+  "description": "Your dedicated scrum master — one-person scrum ceremony skills for Claude Code",
+  "version": "0.1.0",
+  "repository": "https://github.com/nakagam3/your-scrum-routine",
+  "skills": "./skills"
+}
