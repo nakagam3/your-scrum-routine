@@ -75,8 +75,9 @@ Slack のユーザーIDを取得する。方法:
 取得したIDを `~/.claude/your-scrum-routine/config.yml` に保存する:
 
 ```yaml
-slack_user_id: "U044T3QTPCL"
-github_username: "nakagam3"
+# 例: 実際の値はユーザーごとに異なる
+slack_user_id: "UXXXXXXXXXX"
+github_username: "your-github-username"
 timezone: "Asia/Tokyo"
 ```
 
