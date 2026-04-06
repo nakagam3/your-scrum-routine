@@ -3,7 +3,7 @@ name: retrospective
 description: >
   思考のペースメーカー。目標に向かって毎日一番効くアクションを提案し、
   選ぶ・捨てるの判断を支援する。「/retrospective」で明示的に呼び出す。
-allowed-tools: Read, Write, Glob, Bash, Agent, AskUserQuestion, mcp__claude_ai_Google_Calendar__gcal_list_events, mcp__claude_ai_Google_Calendar__gcal_get_event
+allowed-tools: Read, Write, Glob, Bash, Agent, AskUserQuestion, mcp__claude_ai_Google_Calendar__gcal_list_events, mcp__claude_ai_Google_Calendar__gcal_get_event, mcp__claude_ai_Google_Calendar__gcal_create_event, mcp__claude_ai_Slack__slack_send_message
 ---
 
 # Retrospective
@@ -292,11 +292,24 @@ Phase 1-2 の全データを材料に、**明日のゴールを提案する**。
    - 明日の sprint-log/ ファイルを新規作成（Phase 3 の goals）
    - マイルストーン.yml を更新（Phase 4 で変更があった場合）
 
-2. **テキスト生成**:
+2. **カレンダー登録**:
+   - Phase 3 で確定したゴールのうち、既存の MTG でカバーされないものを Google Calendar に作業ブロックとして登録する
+   - 既存 MTG と重複するゴール（例: MTG 参加が done_condition のゴール）は登録しない
+   - 明日のカレンダーの空き時間に配置する。配置ルール:
+     - Must を先に、作業可能な最も早い空きブロックに配置
+     - Win は残りの空き時間に配置（No MTG Time 等の長いブロックを優先）
+   - イベント設定:
+     - summary: `work//dev/{プロジェクト名}/{ゴールsummary}`
+     - colorId: 今Q目標.yml の calendar_color_id を参照（parent の週次MS → 月次MS → 今Q目標の順に辿る）
+     - sendUpdates: `none`
+   - ツール: `mcp__claude_ai_Google_Calendar__gcal_create_event`
+
+3. **テキスト生成 + Slack配信**:
    - [references/output-format.md](references/output-format.md) に定義されたフォーマットに従い、テキストを生成してチャットに出力する
    - 周期境界チェックの追加出力がある場合はフォーマットに従い挿入する
+   - 生成したテキストを Slack 自分宛 DM に送信する（詳細は output-format.md の配信セクション参照）
 
-3. **深掘りの提案**:
+4. **深掘りの提案**:
    - 日報出力の後、AskUserQuestion で「より深くふりかえる?」と聞く
    - Yes → Skill ツールで `development-deck:development-partner` にフォワーディングする。その際、以下のコンテキストを渡す:
      - 今日の予実照合結果
