@@ -13,13 +13,16 @@
 ```
 ■ GoalSetting & Done
 
-- [x] {summary} → {done_condition}
-- [ ] {summary} → {done_condition} … {未達理由 or 残タスク}
+- [x] {summary}
+- [ ] {summary}
+      … {結果 or 残タスク}
 
 ■ 明日のGoalSetting
 
-- [ ] {summary} → {done_condition}
-- [ ] {summary} → {done_condition} [繰越]
+- [ ] {summary}
+      → {done_condition}
+- [ ] {summary} [繰越]
+      → {done_condition}
 
 ■ 今週のGoalSetting
 
@@ -37,15 +40,17 @@
 
 ### GoalSetting & Done
 
-- 前営業日の goals を1行ずつ表示
-- チェックボックス: 達成 → `[x]`（結果テキスト不要）、未達・一部達成 → `[ ]`（`… {未達理由 or 残タスク}` を付与）
+- 2行構造: 1行目 `- [x]/[ ] {summary}`、2行目（未達時のみ）`      … {結果 or 残タスク}`
+- achieved は1行で完結。done_condition は表示しない（結果で上書きされるため）
+- partial/missed のみ2行目に結果・残タスクを記載
 - 計画外の作業は出力しない（YAML の reconciliation.unexpected に記録されるが、日報には含めない）
 - 初回実行（前営業日のゴールなし）の場合、このセクション自体をスキップ
 
 ### 明日のGoalSetting
 
-- チェックボックス付き（全て `[ ]`）で表示
-- 繰越ゴールには `[繰越]` を付与
+- 2行構造: 1行目 `- [ ] {summary}`、2行目 `      → {done_condition}`
+- done_condition は明日の目標として2行目に表示する（Done 欄との違い）
+- 繰越ゴールは1行目の summary 末尾に `[繰越]` を付与
 - Must/Win の区別は出力しない。全てフラットに並べる
 - 並び順は内部的に Must → Win の優先度順
 
