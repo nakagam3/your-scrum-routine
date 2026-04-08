@@ -217,6 +217,7 @@ Phase 1-2 の全データを材料に、**明日のゴールを提案する**。
 | 議事録の Next Steps | [中上裕基] アサインのアクションをそのまま候補に |
 | 明日のカレンダー MTG | MTGの colorId を今Q目標.yml の calendar_color_id と照合 → マッチした q_goal_id の weekly MS を逆引きして parent 候補に。マッチしない場合は従来通り手動設定。MTGの目的・前回の議事録から done_condition を推定 |
 | 明日のカレンダー 凡事 | 〆切付き通知 → そのまま候補に |
+| 接近中の凡事マイルストーン | マイルストーン.yml で done_condition 付き・deadline が7日以内の凡事MSがあれば、毎日15-30分の作業ブロックをゴール候補に追加する。done_condition は「{凡事MS名}に向けて{具体的な次の一歩}を完了する」のように日次で検証可能にする |
 | 繰越（partial/missed） | Phase 2 の結果から |
 | 放置マイルストーン | 今週の weekly MS で、まだ日次ゴールが紐づかないもの |
 | セッションサマリの Next Actions | session-closer の「未解決・Next Actions」から |
@@ -299,15 +300,19 @@ Phase 1-2 の全データを材料に、**明日のゴールを提案する**。
      - Must を先に、作業可能な最も早い空きブロックに配置
      - Win は残りの空き時間に配置（No MTG Time 等の長いブロックを優先）
    - イベント設定:
-     - summary: `work//dev/{プロジェクト名}/{ゴールsummary}`
+     - summary: 通常ゴールは `work//dev/{プロジェクト名}/{ゴールsummary}`、凡事マイルストーン由来は `work//other//{ゴールsummary}`
      - colorId: 今Q目標.yml の calendar_color_id を参照（parent の週次MS → 月次MS → 今Q目標の順に辿る）
      - sendUpdates: `none`
+   - **凡事マイルストーン接近時（deadline 7日以内）**: 他のゴール用ブロックとは別に、最低15分（理想30分）の作業ブロックを必ず確保する。MTG過密日でも隙間に押し込む
    - ツール: `mcp__claude_ai_Google_Calendar__gcal_create_event`
 
 3. **テキスト生成 + Slack配信**:
    - [references/output-format.md](references/output-format.md) に定義されたフォーマットに従い、テキストを生成してチャットに出力する
    - 周期境界チェックの追加出力がある場合はフォーマットに従い挿入する
-   - 生成したテキストを Slack 自分宛 DM に送信する（詳細は output-format.md の配信セクション参照）
+   - 生成したテキストを Slack 自分宛 DM に送信する（`slack_send_message` で channel_id に config.yml の slack_user_id を指定）
+   - **メッセージ全体をコードブロック（triple backtick）で囲む**。Slack のマークダウン解釈を回避し、整形済みテキストとして表示するため
+   - コードブロック内の注意: `~` は範囲表現で Slack がストライクスルーとして解釈するため `-` に置換する
+   - 投稿失敗時はエラーを表示し、チャット出力のみで続行する（ブロックしない）
 
 4. **深掘りの提案**:
    - 日報出力の後、AskUserQuestion で「より深くふりかえる?」と聞く
