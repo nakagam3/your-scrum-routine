@@ -101,6 +101,7 @@ goals:
   - id: 2026q2-stretch
     summary: "AXコンサルタント"
     type: stretch
+    status: in_progress    # in_progress | confirmed
     prior_q_reflection: |
       前Q「成果を成立させる設計者」で計画力にフォーカスしたが未達(評価4)。
       判断基準を立てること・意図して行動することが課題として残った。
@@ -146,6 +147,7 @@ goals:
 | prior_q_reflection | string | No | 前Qからの引き継ぎ課題（stretch で主に使用） |
 | skills_to_acquire | string \| null | No | 習得したい能力（stretch 用） |
 | action_plan | string \| null | No | アクションプラン（stretch 用） |
+| status | enum | No | in_progress \| confirmed。ファクト確定ルールで使用。日報の North Star 行で confirmed のみ summary を表示し、それ以外は「設定中」に置換する。stretch から導入、必要に応じて performance にも広げる |
 
 ### roof / moon の設計意図
 
@@ -171,6 +173,10 @@ roof と moon は同一ゴール内の達成段階であり、別ゴールでは
 ```yaml
 quarter: "2026-Q2"
 updated_at: "2026-04-04"
+
+# プロジェクト名の辞書置換（日報出力時の Lint で使用）
+project_aliases:
+  {内部ID or 略語}: "{読者向けの正式名称}"
 
 milestones:
   # --- 月次マイルストーン（KR単位で分離） ---
@@ -216,6 +222,7 @@ changelog:
 |---|---|---|---|
 | quarter | string | Yes | 四半期ラベル |
 | updated_at | date | Yes | 最終更新日 |
+| project_aliases | map | No | codename → 正式名称の authoritative mapping。日報 Lint 時、document-reviewer に渡して読者向け置換を行う。キーは内部語彙、値は正式名称。**原則**: マイルストーンの summary/done_condition は最初から正式名称で書く。`project_aliases` は codename が混入した場合の救済であり、恒久的な翻訳レイヤーではない |
 | milestones[].id | string | Yes | 一意ID。月次: "ms-{month}-{kr}", 週次: "ms-{kr}-w{week}" |
 | milestones[].summary | string | Yes | マイルストーンの要約 |
 | milestones[].deadline | date | Yes | 期限 |
